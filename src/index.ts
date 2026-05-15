@@ -40,7 +40,7 @@ program
   .option('-n, --network <network>', 'Algorand network (mainnet or testnet)')
   .option('-m, --mnemonic <mnemonic>', 'Signing wallet mnemonic')
   .option('--fail-on-error', 'Exit with code 1 if anchoring fails', false)
-  .action((options) => { anchorCommand(options); });
+  .action(anchorCommand);
 
 program
   .command('verify')

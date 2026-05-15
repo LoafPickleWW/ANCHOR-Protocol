@@ -18,10 +18,10 @@ export interface PublishOptions {
 export async function anchorCommand(options: PublishOptions) {
   const config = await loadConfig();
   const network = options.network || config?.network || 'mainnet';
-  const mnemonic = options.mnemonic || config?.mnemonic;
+  const mnemonic = options.mnemonic || process.env.ANCHOR_MNEMONIC || config?.mnemonic;
 
   if (!mnemonic) {
-    console.error(chalk.red('Error: Mnemonic not found. Run "anchor init" or provide --mnemonic.'));
+    console.error(chalk.red('Error: Mnemonic not found. Run "anchor init" or provide --mnemonic (or ANCHOR_MNEMONIC env var).'));
     process.exit(1);
   }
 

@@ -55,5 +55,5 @@ runs:
           ARGS="$ARGS --fail-on-error"
         fi
         
-        # Run via npx
+        # Run via npx (mnemonic passed via ANCHOR_MNEMONIC env)
         npx @loafpickleww/anchor $ARGS
