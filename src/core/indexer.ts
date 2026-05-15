@@ -42,7 +42,7 @@ export class IndexerService {
     
     return (results.transactions || []).map((tx: any) => ({
       txId: tx.id,
-      timestamp: new Date(tx['round-time'] * 1000).toISOString(),
+      timestamp: tx['round-time'] ? new Date(tx['round-time'] * 1000).toISOString() : 'pending',
       note: tx.note ? Buffer.from(tx.note, 'base64').toString('utf-8') : '',
       sender: tx.sender,
     }));

@@ -12,6 +12,6 @@ dist/
 # Config
 .anchor/
 
-# OS files
-.DS_Store
-Thumbs.db
+# Artifacts
+test-artifact.txt
+*.txt

@@ -7,7 +7,7 @@ import { unlink } from 'fs/promises';
 
 export interface PublishOptions {
   package?: string;
-  version: string;
+  release: string;
   type: 'pre' | 'post';
   artifacts?: string;
   network?: Network;
@@ -50,7 +50,7 @@ export async function anchorCommand(options: PublishOptions) {
   }
 
   const pkgName = options.package || (await import(process.cwd() + '/package.json', { with: { type: 'json' } })).default.name;
-  const version = options.version;
+  const version = options.release;
 
   console.log(chalk.cyan(`Anchoring ${pkgName}@${version} (${options.type})...`));
 

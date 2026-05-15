@@ -10,6 +10,8 @@ export interface VerifyOptions {
   network?: Network;
   skipNpm?: boolean;
   skipChain?: boolean;
+  wallet?: string;
+  file?: string;
 }
 
 export async function verifyCommand(pkgName: string, version: string, options: VerifyOptions) {
@@ -25,9 +27,9 @@ export async function verifyCommand(pkgName: string, version: string, options: V
   };
 
   try {
-    // 1. Resolve signing wallet from npm
-    let npmWallet = '';
-    if (!options.skipNpm) {
+    // 1. Resolve signing wallet
+    let npmWallet = options.wallet || '';
+    if (!npmWallet && !options.skipNpm) {
       const metadata = await getPackageMetadata(pkgName, version);
       npmWallet = metadata.anchor?.wallet || '';
       report.npm_wallet = npmWallet;
@@ -35,6 +37,8 @@ export async function verifyCommand(pkgName: string, version: string, options: V
       if (!npmWallet) {
         return emitResult(report, options);
       }
+    } else if (options.wallet) {
+      report.npm_wallet = npmWallet;
     }
 
     // 2. Cross-validate on-chain
@@ -57,9 +61,16 @@ export async function verifyCommand(pkgName: string, version: string, options: V
     report.cross_validated = true;
 
     // 4. Fetch and hash artifact
-    const metadata = await getPackageMetadata(pkgName, version);
-    const tarballBuffer = await downloadTarball(metadata.dist.tarball);
-    const localHash = hashBuffer(tarballBuffer);
+    let localHash = '';
+    if (options.file) {
+      const fs = await import('fs/promises');
+      const content = await fs.readFile(options.file);
+      localHash = hashBuffer(content);
+    } else {
+      const metadata = await getPackageMetadata(pkgName, version);
+      const tarballBuffer = await downloadTarball(metadata.dist.tarball);
+      localHash = hashBuffer(tarballBuffer);
+    }
     report.local_hash = `sha256:${localHash}`;
 
     // 5. Look up anchor transactions

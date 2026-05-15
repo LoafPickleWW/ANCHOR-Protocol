@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { initCommand } from './commands/init.js';
+import { registerCommand } from './commands/register.js';
 import { anchorCommand } from './commands/anchor.js';
 import { verifyCommand } from './commands/verify.js';
 import { readFile } from 'fs/promises';
@@ -12,7 +13,7 @@ const program = new Command();
 program
   .name('anchor')
   .description('Algorand Native Cryptographic Hash Origin Record — Supply Chain Integrity')
-  .version(pkg.version);
+  .version(pkg.version, '-V, --version');
 
 program
   .command('init')
@@ -21,10 +22,18 @@ program
   .action(initCommand);
 
 program
+  .command('register')
+  .description('Register a package name to your signing wallet')
+  .argument('<package>', 'Package name')
+  .option('-n, --network <network>', 'Algorand network (mainnet or testnet)')
+  .option('-m, --mnemonic <mnemonic>', 'Signing wallet mnemonic')
+  .action(registerCommand);
+
+program
   .command('publish')
   .alias('anchor')
   .description('Broadcast anchor transactions for a release artifact')
-  .requiredOption('-v, --version <version>', 'Package version being published')
+  .requiredOption('-r, --release <version>', 'Package version being published')
   .option('-p, --package <package>', 'Package name (auto-detects if omitted)')
   .option('-t, --type <type>', 'Anchor type (pre or post)', 'post')
   .option('-a, --artifacts <artifacts>', 'Explicit artifact paths (comma separated)')
@@ -39,6 +48,8 @@ program
   .argument('<package>', 'Package name')
   .argument('<version>', 'Package version')
   .option('-n, --network <network>', 'Algorand network (mainnet or testnet)', 'mainnet')
+  .option('-w, --wallet <wallet>', 'Override signing wallet address')
+  .option('-f, --file <file>', 'Local file to verify against')
   .option('--strict', 'Treat partial or unenrolled states as failures', false)
   .option('--json', 'Output results in JSON format', false)
   .option('--skip-npm', 'Skip npm registry check (for testing)', false)
