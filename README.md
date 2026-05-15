@@ -223,7 +223,7 @@ The following design decisions are explicitly open for feedback:
 | Component | Status |
 |---|---|
 | RFC | v0.1 — open for review |
-| `@anchor-protocol/cli` | **Phase 1 & 2 Complete** (v1.0.0) |
+| `@loafpickleww/anchor` | **Phase 1 & 2 Complete** (v1.0.0) |
 | GitHub Action | **Complete** (v1) |
 | Verification CLI | **Complete** |
 | npm metadata integration | Planned — Phase 3 |
@@ -242,7 +242,7 @@ The protocol has been successfully verified on the Algorand Testnet.
 
 ```bash
 # 1. Install CLI
-npm install -g @anchor-protocol/cli
+npm install -g @loafpickleww/anchor
 
 # 2. Initialize your signing wallet
 anchor init --network testnet
