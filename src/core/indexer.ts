@@ -25,6 +25,11 @@ export class IndexerService {
     return this.searchNotes(wallet, notePrefix);
   }
 
+  async findRegistration(wallet: string, pkgName: string): Promise<boolean> {
+    const results = await this.searchRegistration(wallet, pkgName);
+    return results.length > 0;
+  }
+
   async searchAnchors(wallet: string, pkgName: string, version: string): Promise<AnchorRecord[]> {
     const notePrefix = Buffer.from(`anchor:${pkgName}:${version}:`).toString('base64');
     return this.searchNotes(wallet, notePrefix);

@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import chalk from 'chalk';
 import { AlgorandService, Network } from '../core/algorand.js';
+import { IndexerService } from '../core/indexer.js';
 import { hashFile } from '../core/hash.js';
 import { loadConfig } from '../utils/config.js';
 import { unlink } from 'fs/promises';
@@ -51,6 +52,18 @@ export async function anchorCommand(options: PublishOptions): Promise<void> {
 
   const pkgName = options.package || (await import(process.cwd() + '/package.json', { with: { type: 'json' } })).default.name;
   const version = options.release;
+
+  // Auto-registration check
+  const indexer = new IndexerService(network);
+  const isRegistered = await indexer.findRegistration(account.addr.toString(), pkgName);
+
+  if (!isRegistered) {
+    console.log(chalk.cyan(`No registration found for ${pkgName} — registering wallet on-chain...`));
+    const regNote = `anchor:register:${pkgName}`;
+    const regTxn = await algo.createAnchorTransactions(account, [regNote]);
+    const regTxIds = await algo.broadcastTransactions(account, regTxn);
+    console.log(chalk.green(`✓ Registered ${pkgName} (TX: ${regTxIds[0]})`));
+  }
 
   console.log(chalk.cyan(`Anchoring ${pkgName}@${version} (${options.type})...`));
 
