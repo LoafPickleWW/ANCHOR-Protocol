@@ -15,7 +15,7 @@ export interface PublishOptions {
   failOnError?: boolean;
 }
 
-export async function anchorCommand(options: PublishOptions) {
+export async function anchorCommand(options: PublishOptions): Promise<void> {
   const config = await loadConfig();
   const network = options.network || config?.network || 'mainnet';
   const mnemonic = options.mnemonic || process.env.ANCHOR_MNEMONIC || config?.mnemonic;
@@ -86,8 +86,6 @@ export async function anchorCommand(options: PublishOptions) {
       fs.appendFileSync(process.env.GITHUB_OUTPUT, `tx-ids=${results.txIds.join(',')}\n`);
       fs.appendFileSync(process.env.GITHUB_OUTPUT, `hashes=${results.hashes.join(',')}\n`);
     }
-    
-    return results;
   } catch (error: any) {
     console.error(chalk.red(`\n✗ Anchoring failed: ${error.message}`));
     if (options.failOnError) process.exit(1);
