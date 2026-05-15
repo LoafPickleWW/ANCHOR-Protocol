@@ -29,9 +29,31 @@ inputs:
 outputs:
   tx-ids:
     description: Comma-separated Algorand transaction IDs for the anchor transactions
+    value: ${{ steps.anchor.outputs.tx-ids }}
   hashes:
     description: Comma-separated SHA-256 hashes of the anchored artifacts
+    value: ${{ steps.anchor.outputs.hashes }}
 
 runs:
-  using: node20
-  main: dist/action/index.js
+  using: "composite"
+  steps:
+    - name: Run ANCHOR Publish
+      id: anchor
+      shell: bash
+      env:
+        ANCHOR_MNEMONIC: ${{ inputs.mnemonic }}
+        ANCHOR_NETWORK: ${{ inputs.network }}
+      run: |
+        # Construct arguments
+        ARGS="publish --release ${{ inputs.version }} --type ${{ inputs.type }}"
+        
+        if [ -n "${{ inputs.artifacts }}" ]; then
+          ARGS="$ARGS --artifacts ${{ inputs.artifacts }}"
+        fi
+        
+        if [ "${{ inputs.fail-on-error }}" = "true" ]; then
+          ARGS="$ARGS --fail-on-error"
+        fi
+        
+        # Run via npx
+        npx @loafpickleww/anchor $ARGS

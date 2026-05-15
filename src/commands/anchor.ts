@@ -80,6 +80,12 @@ export async function anchorCommand(options: PublishOptions) {
         await unlink(path).catch(() => {});
       }
     }
+
+    if (process.env.GITHUB_OUTPUT) {
+      const fs = await import('fs');
+      fs.appendFileSync(process.env.GITHUB_OUTPUT, `tx-ids=${results.txIds.join(',')}\n`);
+      fs.appendFileSync(process.env.GITHUB_OUTPUT, `hashes=${results.hashes.join(',')}\n`);
+    }
     
     return results;
   } catch (error: any) {
