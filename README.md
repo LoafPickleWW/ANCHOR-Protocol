@@ -223,10 +223,36 @@ The following design decisions are explicitly open for feedback:
 | Component | Status |
 |---|---|
 | RFC | v0.1 — open for review |
-| `@anchor-protocol/cli` | In development |
-| GitHub Action | In development |
-| Verification CLI | In development |
+| `@anchor-protocol/cli` | **Phase 1 & 2 Complete** (v1.0.0) |
+| GitHub Action | **Complete** (v1) |
+| Verification CLI | **Complete** |
 | npm metadata integration | Planned — Phase 3 |
+
+---
+
+## Live Demo & Receipts
+
+The protocol has been successfully verified on the Algorand Testnet.
+
+- **Demo Signing Wallet:** `W6MZUOCM7ES5R7VPX4OK3P5R4V7FAR4F5UIU4WMMRB4KCRBL7KOF3R6TKU`
+- **Registration Receipt:** [Z5UQLMCJAS27ZXC5...](https://testnet.algoexplorer.io/tx/Z5UQLMCJAS27ZXC57644Y2PBKJM5FVC5TYCPFIZGZVEKIIKBLM7A)
+- **Anchor Receipt:** [OIKSBFBGXBF2TX5B...](https://testnet.algoexplorer.io/tx/OIKSBFBGXBF2TX5BZ5SPSZ3U6RKL4XYTAHV4WMXPU7RG3HQY5ULA)
+
+### Quick Start
+
+```bash
+# 1. Install CLI
+npm install -g @anchor-protocol/cli
+
+# 2. Initialize your signing wallet
+anchor init --network testnet
+
+# 3. Anchor a release
+anchor publish --release 1.0.0
+
+# 4. Verify any package
+anchor verify my-package 1.0.0
+```
 
 Reference implementation and demo: *[github link — coming soon]*
 
