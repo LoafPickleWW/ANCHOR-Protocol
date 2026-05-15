@@ -1,0 +1,37 @@
+name: ANCHOR — Algorand Supply Chain Integrity
+description: Anchor software artifact hashes to the Algorand blockchain
+author: LoafPickle Worldwide
+
+inputs:
+  mnemonic:
+    description: Algorand signing wallet mnemonic (store in GitHub Secrets)
+    required: true
+  version:
+    description: Package version being published
+    required: false
+    default: ${{ github.ref_name }}
+  type:
+    description: Anchor type — pre or post
+    required: false
+    default: post
+  artifacts:
+    description: Explicit artifact paths (comma separated). Auto-detects via npm pack if omitted.
+    required: false
+  network:
+    description: Algorand network — mainnet or testnet
+    required: false
+    default: mainnet
+  fail-on-error:
+    description: Fail the workflow if anchoring fails
+    required: false
+    default: 'false'
+
+outputs:
+  tx-ids:
+    description: Comma-separated Algorand transaction IDs for the anchor transactions
+  hashes:
+    description: Comma-separated SHA-256 hashes of the anchored artifacts
+
+runs:
+  using: node20
+  main: dist/action/index.js
